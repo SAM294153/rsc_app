@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1F3864">
+<meta name="robots" content="noindex,nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<title>Облік ТСЦ</title>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--tx:#1b1f24;--mut:#667085;--line:#d9dfe8;--pri:#1F3864;--pri-tx:#fff;--soft:#DDEBF7;--ok:#1e7a3c;--okbg:#dff3e5;--bad:#b42318;--badbg:#fde4e1;--warn:#8a5a00;--warnbg:#fff1cc}
+@media (prefers-color-scheme:dark){:root{--bg:#10151c;--card:#1a212b;--tx:#e8ecf2;--mut:#9aa6b6;--line:#2b3542;--pri:#6c9bf0;--pri-tx:#0b1220;--soft:#243247;--ok:#6fd08c;--okbg:#17321f;--bad:#ff8a80;--badbg:#3a1b19;--warn:#f3c969;--warnbg:#3a2e12}}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font:16px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--tx);-webkit-tap-highlight-color:transparent}
+#app{height:100%;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
+button,input,select,textarea{font:inherit;color:inherit}
+.btn{min-height:48px;padding:0 16px;border-radius:12px;border:1px solid var(--line);background:var(--card);cursor:pointer}
+.btn.pri{background:var(--pri);color:var(--pri-tx);border-color:var(--pri);font-weight:600}
+.btn.bad{color:var(--bad);border-color:var(--bad)}
+.btn:disabled{opacity:.5}
+input,select,textarea{width:100%;min-height:48px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card)}
+textarea{min-height:84px}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 4px}
+.top{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--pri);color:var(--pri-tx)}
+.top h1{flex:1;margin:0;font-size:18px}
+.top .btn{min-height:40px;padding:0 12px;background:transparent;color:inherit;border-color:rgba(255,255,255,.5)}
+.ctrls{padding:10px 12px;display:grid;gap:8px;background:var(--card);border-bottom:1px solid var(--line)}
+.ctrls .row{display:flex;gap:8px}.ctrls .row>*{flex:1}
+.count{font-size:13px;color:var(--mut);padding:6px 14px}
+#list{flex:1;overflow:auto;padding:0 12px 90px;-webkit-overflow-scrolling:touch}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;cursor:pointer}
+.card.free{opacity:.6}
+.card .l1{display:flex;gap:8px;align-items:baseline;justify-content:space-between}
+.card .ip{font-weight:700}
+.card .nm{flex:1;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card .l2{color:var(--mut);font-size:14px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:99px;margin-right:6px;background:var(--soft)}
+.tag.on{background:var(--okbg);color:var(--ok)}.tag.off{background:var(--badbg);color:var(--bad)}.tag.chg{background:var(--warnbg);color:var(--warn)}
+.bar{position:fixed;left:0;right:0;bottom:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:var(--card);border-top:1px solid var(--line);display:flex;gap:8px}
+.bar .btn{flex:1}
+.screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;z-index:5;padding-top:env(safe-area-inset-top)}
+.screen .body{flex:1;overflow:auto;padding:4px 14px 110px}
+.ro{background:var(--soft);border-radius:12px;padding:8px 12px;font-size:14px}
+.center{max-width:480px;margin:0 auto;padding:24px 16px;width:100%}
+.center h1{font-size:22px}.muted{color:var(--mut);font-size:14px}
+.msg{padding:10px 12px;border-radius:12px;margin:10px 0;font-size:14px}.msg.e{background:var(--badbg);color:var(--bad)}.msg.w{background:var(--warnbg);color:var(--warn)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:20;padding:16px}
+.modal .box{background:var(--card);border-radius:16px;padding:16px;max-width:420px;width:100%;max-height:90%;overflow:auto}
+.modal .acts{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}.modal .acts .btn{flex:1}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:99px;z-index:30;font-size:14px;max-width:90%}
+.chrow{border-bottom:1px solid var(--line);padding:8px 0;font-size:14px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="core.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
