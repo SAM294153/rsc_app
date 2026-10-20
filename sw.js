@@ -1,5 +1,5 @@
 // Service worker: застосунок працює без інтернету (кеш оболонки). Даних тут немає.
-const VER = 'tsc-v1';
+const VER = 'tsc-v2';
 const FILES = ['./', './index.html', './app.js', './core.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(VER).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => {
