@@ -132,7 +132,7 @@
     try {
       const r = await T.decryptBlob(await file.arrayBuffer(), pw.value, T.MAGIC_PACK);
       if (r.obj.format !== 'tsc-pack') throw new Error('Це не пакет даних (очікується tsc-pack).');
-      if (r.obj.version !== 2) throw new Error('Пакет застарілого формату. Оновіть tsc_sync.py на ПК до версії 2 і зробіть новий експорт.');
+      if (r.obj.version !== 3) throw new Error('Пакет застарілого формату. Оновіть tsc_sync.py на ПК до останньої версії і зробіть новий експорт.');
       const pending = S ? T.countUnexported(S) : 0;
       if (pending && !(await confirmBox('Є неекспортовані зміни', `Неекспортованих змін: ${pending}. Якщо відкрити новий пакет, вони будуть втрачені. Продовжити?`, 'Замінити', 'bad'))) return;
       if (S && T.countChanges(S) && !pending &&
@@ -435,7 +435,7 @@
         mk(F.OS, sel(F.OS, L.os)),
         mk(F.MFR, sel(F.MFR, L.manufacturers)),
         mk(F.NOTES, h('textarea', {}, cur[F.NOTES])),
-        mk(F.LOGIN, h('input', { value: cur[F.LOGIN], autocapitalize: 'off' })),
+        mk(F.INV, h('input', { value: cur[F.INV], autocapitalize: 'off', inputmode: 'text' })),
       ];
       if (fields.includes(F.PASS)) parts.push(mk(F.PASS, h('input', { value: cur[F.PASS], autocapitalize: 'off' })));
       const msgs = h('div');

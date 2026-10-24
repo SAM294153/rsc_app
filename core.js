@@ -11,7 +11,7 @@
   const F = {
     NUM: '№', NAME: "Ім'я обладнання", MAC: 'МАС адреса', STATUS: 'Статус', TYPE: 'Тип обладнання',
     USER: 'Користувач (ПІБ)', OS: 'Тип ОС', MFR: 'Виробник обладнання', NOTES: 'Примітки',
-    LOGIN: "Ім'я користувача", PASS: 'Пароль',
+    INV: 'Інвентарний номер', PASS: 'Пароль',
   };
   const REQUIRED = [F.NAME, F.TYPE, F.STATUS];     // обов'язкові поля пристрою, якщо запис не порожній
   const COLLS = ['users', 'equipment', 'os', 'manufacturers', 'departments'];   // довідники, які можна редагувати
@@ -247,7 +247,7 @@
         e.exported_at = stamp; if (e.updated_at > stamp) e.updated_at = stamp;
       }
     }
-    return { format: 'tsc-changes', version: 2, based_on_export_id: pack.export_id, device: 'android',
+    return { format: 'tsc-changes', version: 3, based_on_export_id: pack.export_id, device: 'android',
       created_at: stamp, fields: pack.fields, changes, ref_changes };
   }
 
