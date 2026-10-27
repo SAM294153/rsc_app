@@ -196,13 +196,21 @@
   function mountDevices() {
     const sheetSel = h('select', { onchange: e => { view.sheet = e.target.value; renderDevices(); } },
       Object.keys(S.pack.sheets).map(n => h('option', { value: n, selected: n === view.sheet }, n)));
-    const q = h('input', { type: 'search', placeholder: "Пошук: ІР, ім'я, МАС, користувач… (по всіх ТСЦ)", value: view.q,
+    const q = h('input', { type: 'search', placeholder: "Пошук: ІР, ім'я, МАС, інв. номер… (по всіх ТСЦ)", value: view.q,
       oninput: e => { view.q = e.target.value; renderDevices(); } });
+    const scanBtn = h('button', { class: 'btn', title: 'Сканувати штрих-код', style: 'flex:0 0 56px', onclick: async () => {
+      const v = await window.TSCScan.open({ title: 'Пошук за штрих-кодом' });
+      if (!v) return;
+      view.q = v; q.value = v;
+      const r = renderDevices();
+      if (r.devices === 1) openEdit(r.first.sh, r.first.row);
+      else if (!r.devices) toast(`Пристрою з номером «${v}» не знайдено`);
+    } }, '📷');
     const flt = h('select', { onchange: e => { view.filter = e.target.value; renderDevices(); } },
       [['all', 'Усі'], ['used', 'Зайняті'], ['free', 'Вільні'], ['off', 'Вимкнені'], ['edited', 'Змінені мною']]
         .map(([v, t]) => h('option', { value: v, selected: v === view.filter }, t)));
     devCount = h('div', { class: 'count' }); devList = h('div', { id: 'list' });
-    content.append(h('div', { class: 'ctrls' }, sheetSel, q, h('div', { class: 'row' }, flt)), devCount, devList);
+    content.append(h('div', { class: 'ctrls' }, sheetSel, h('div', { class: 'row' }, q, scanBtn), h('div', { class: 'row' }, flt)), devCount, devList);
     renderCurrentList = renderDevices; renderDevices();
   }
   function renderDevices() {
@@ -234,6 +242,7 @@
       }
     }
     for (const it of out) devList.append(devCard(it.sh, it.row, it.v, !!q));
+    return { devices: total, first: out[0] };
   }
 
   // ----- вкладка «Співробітники» -----
@@ -435,7 +444,20 @@
         mk(F.OS, sel(F.OS, L.os)),
         mk(F.MFR, sel(F.MFR, L.manufacturers)),
         mk(F.NOTES, h('textarea', {}, cur[F.NOTES])),
-        mk(F.INV, h('input', { value: cur[F.INV], autocapitalize: 'off', inputmode: 'text' })),
+        (() => {                                           // інвентарний номер + кнопка камери
+          const inp = h('input', { value: cur[F.INV], autocapitalize: 'off', inputmode: 'text' }); inputs[F.INV] = inp;
+          const invMsg = h('div');
+          const chk = v => {
+            clear(invMsg); const d = T.findByInventory(S, v).find(x => !(x.sheet === sheet && x.row.ip === row.ip));
+            if (d) invMsg.append(h('div', { class: 'msg w' }, `Цей номер уже вказано в пристрої ${d.sheet} · ${d.row.ip}.`));
+          };
+          inp.addEventListener('input', () => chk(inp.value.trim()));
+          const cam = h('button', { class: 'btn', type: 'button', title: 'Сканувати штрих-код', style: 'flex:0 0 56px', onclick: async () => {
+            const v = await window.TSCScan.open({ title: 'Інвентарний номер' });
+            if (v) { inp.value = v; chk(v); toast('Номер прочитано'); }
+          } }, '📷');
+          return h('div', {}, h('label', {}, F.INV), h('div', { style: 'display:flex;gap:8px' }, inp, cam), invMsg);
+        })(),
       ];
       if (fields.includes(F.PASS)) parts.push(mk(F.PASS, h('input', { value: cur[F.PASS], autocapitalize: 'off' })));
       const msgs = h('div');

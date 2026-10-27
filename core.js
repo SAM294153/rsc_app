@@ -121,6 +121,7 @@
     }
     return out;
   }
+  const findByInventory = (state, value) => norm(value) ? devicesWith(state, F.INV, norm(value)) : [];
   function deviceCounts(state) {
     const c = getCache(state);
     if (!c.devCount) {
@@ -279,6 +280,10 @@
         if (norm(effective(state, sheet, r)[F.MAC]).toUpperCase() === mac) { warnings.push(`Така МАС-адреса вже є в записі ${r.ip}.`); break; }
       }
     }
+    if (norm(v[F.INV])) {
+      const dup = findByInventory(state, v[F.INV]).find(d => !(d.sheet === sheet && d.row.ip === row.ip));
+      if (dup) warnings.push(`Інвентарний номер уже вказано в пристрої ${dup.sheet} · ${dup.row.ip}.`);
+    }
     return { errors, warnings, empty: false, values: v };
   }
   function validateUser(state, v) {
@@ -294,7 +299,7 @@
 
   root.TSC = { MAGIC_PACK, MAGIC_LOCAL, F, REQUIRED, COLLS, TITLES, DEVICE_FIELD, DATE_FIELDS, USER_KEY, USER_DEPT,
     norm, deriveKey, encryptObj, decryptBlob, pyHash, newState, baseValues, effective, userInfo, lists,
-    refRecords, refSave, refDelete, usage, cascadeRename, devicesWith, deviceCounts, applyEdit, isPending,
+    refRecords, refSave, refDelete, usage, cascadeRename, devicesWith, findByInventory, deviceCounts, applyEdit, isPending,
     refEditList, allPending, clearEdits, countChanges, countUnexported, buildChanges, validate, validateUser, normMac, validDate };
   if (typeof module !== 'undefined') module.exports = root.TSC;
 })(typeof window !== 'undefined' ? window : globalThis);
